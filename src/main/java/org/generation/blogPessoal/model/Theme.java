@@ -19,9 +19,9 @@ public class Theme {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
-	@NotNull
+	@NotNull(message = "O atributo Descrição é obrigatório")
 	private String description;
 	
 	/*
@@ -31,7 +31,7 @@ public class Theme {
 	 * posts linked with "moreInfo" will be deleted.
 	 */
 	
-	@OneToMany(mappedBy = "theme", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "theme", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("theme")
 	private List<Post> post;
 

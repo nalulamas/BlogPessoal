@@ -1,6 +1,10 @@
 package org.generation.blogPessoal.controller;
 
 import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.generation.blogPessoal.model.Post;
 import org.generation.blogPessoal.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/postagens")
@@ -32,7 +38,8 @@ public class PostController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Post> getById(@PathVariable long id) {
-		return repository.findById(id).map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
+		return repository.findById(id).map(resp -> ResponseEntity.ok(resp))
+				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
 	}
 
 	@GetMapping("/title/{title}")
@@ -41,17 +48,26 @@ public class PostController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Post> post(@RequestBody Post post) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(post));
+	public ResponseEntity<Post> post(@Valid @RequestBody Post post) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(repository.save(post));
 	}
 
 	@PutMapping
-	public ResponseEntity<Post> put(@RequestBody Post post) {
-		return ResponseEntity.status(HttpStatus.OK).body(repository.save(post));
+	public ResponseEntity<Post> put(@Valid @RequestBody Post post) {
+		return repository.findById(post.getId())
+				.map(resp -> ResponseEntity.status(HttpStatus.OK).body(repository.save(post)))
+				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
 	}
-
+	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void delete (@PathVariable long id) {
+		Optional<Post> post = repository.findById(id);
+		
+		if(post.isEmpty())
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		
 		repository.deleteById(id);
 	}
 }

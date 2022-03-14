@@ -58,7 +58,7 @@ public class UserControllerTest {
 	@DisplayName("Não deve permitir duplicação do usuário.")
 	public void dontDuplicateAnUser() {
 		
-		userService.RegisterUser(new User(0L, "Maria Silva", "maria@email.com","12345"));
+		userService.registerUser(new User(0L, "Maria Silva", "maria@email.com","12345"));
 		
 		HttpEntity<User> request = new HttpEntity<User>(new User(0L,"Paulo Antunes", "Paulo_Antunes@email.com", "123456"));
 		
@@ -71,7 +71,7 @@ public class UserControllerTest {
 	@DisplayName("Alterar um usuario")
 	public void mostChangeUser() {
 		
-		Optional <User> userCreate = userService.RegisterUser(new User (0L, "Juliana Andrews","juliana@email.com", "juliana123"));		
+		Optional <User> userCreate = userService.registerUser(new User (0L, "Juliana Andrews","juliana@email.com", "juliana123"));		
 		
 		User userUpdate = new User(userCreate.get().getId(),
 				"Juliana Andrws Ramos", "juliana_ramos@email.com", "juliana123");
@@ -90,10 +90,10 @@ public class UserControllerTest {
 	@Order(4)
 	@DisplayName("Listar todos as Postagens")
 	public void mostChangeAllPosts() {
-		userService.RegisterUser(new User(0L, "Sabrina Sanches", "sabrina@email.com", 
+		userService.registerUser(new User(0L, "Sabrina Sanches", "sabrina@email.com", 
 				"sabrina123"));			
 		
-		userService.RegisterUser(new User (0L, "Ricardo Marques", "ricardo@email.com","ricardo123"));
+		userService.registerUser(new User (0L, "Ricardo Marques", "ricardo@email.com","ricardo123"));
 		
 		ResponseEntity<String> answer = testRestTemplate
 				.withBasicAuth("sabrina@email.com", "sabrina123")

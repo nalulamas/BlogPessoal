@@ -2,8 +2,8 @@ package org.generation.blogPessoal.service;
 
 import java.nio.charset.Charset;
 import java.util.Optional;
-import org.apache.commons.codec.binary.Base64;
 
+import org.apache.commons.codec.binary.Base64;
 import org.generation.blogPessoal.model.User;
 import org.generation.blogPessoal.model.UserLogin;
 import org.generation.blogPessoal.repository.UserRepository;
@@ -17,49 +17,59 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserService {
 
 	@Autowired
-	private UserRepository repository;
+	private UserRepository userRepository;
 
-	public Optional<User> RegisterUser(User user) {
-		Optional<User> userM = repository.findByUser(user.getUser());
-
-		if (userM.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email já cadastrado");
-		} else {
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-			String passwordEncoder = encoder.encode(user.getPassword());
-			user.setPassword(passwordEncoder);
-			return Optional.ofNullable(repository.save(user));
-		}
+	public Optional<User> registerUser(User user) {
+		if (userRepository.findByUser(user.getUser()).isPresent())
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
+		user.setPassword(encryptPassword(user.getPassword()));
+		return Optional.of(userRepository.save(user));
 	}
-	/*
-	 * BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-	 * 
-	 * String passwordEncoder = encoder.encode(user.getPassword());
-	 * user.setPassword(passwordEncoder);
-	 * 
-	 * return repository.save(user);
-	 */
 
-	public Optional<UserLogin> Login(Optional<UserLogin> user) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		Optional<User> usuario = repository.findByUser(user.get().getUser());
+	public Optional<User> updateUser(User user) {
+		if (userRepository.findById(user.getId()).isPresent()) {
+			Optional<User> searchUser = userRepository.findByUser(user.getUser());
+			if (searchUser.isPresent()) {
+				if (searchUser.get().getId() != user.getId())
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
+			}
+			user.setPassword(encryptPassword(user.getPassword()));
+			return Optional.of(userRepository.save(user));
+		}
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!", null);
+	}
 
-		if (usuario.isPresent()) {
-			if (encoder.matches(user.get().getPassword(), usuario.get().getPassword())) {
-
-				String auth = user.get().getUser() + ":" + user.get().getPassword();
-				byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
-				String authHeader = "Basic " + new String(encodedAuth);
-
-				user.get().setToken(authHeader);
-				user.get().setName(usuario.get().getName());
-
-				return user;
+	public Optional<UserLogin> userLogin (Optional<UserLogin> userLogin) {	
+		Optional<User> user = userRepository.findByUser(userLogin.get().getUser());
+		if (user.isPresent()) {
+			if (comparePassword(userLogin.get().getPassword(), user.get().getPassword())) {
+				userLogin.get().setId(user.get().getId());
+				userLogin.get().setName(user.get().getName());
+				userLogin.get().setPicture(user.get().getPicture());
+				userLogin.get().setToken(generatorBasicToken(userLogin.get().getUser(), userLogin.get().getPassword()));
+                                userLogin.get().setPassword(user.get().getPassword());
+				return userLogin;
 			}
 		}
-
-		return null;
-
+		throw new ResponseStatusException(
+				HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos!", null);
 	}
+
+	private String encryptPassword(String password) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String passwordEncoder = encoder.encode(password);
+		return passwordEncoder;
+	}
+
+	private boolean comparePassword(String passwordTyped, String passwordBase) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.matches(passwordTyped, passwordBase);
+	}
+
+	private String generatorBasicToken(String email, String password) {
+		String structure = email + ":" + password;
+		byte[] structureBase64 = Base64.encodeBase64(structure.getBytes(Charset.forName("US-ASCII")));
+		return "Basic " + new String(structureBase64);
+	}
+
 }

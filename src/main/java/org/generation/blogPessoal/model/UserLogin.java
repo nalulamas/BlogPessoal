@@ -2,13 +2,35 @@ package org.generation.blogPessoal.model;
 
 public class UserLogin {
 	
+	private long id;
+	
 	private String name;
 	
 	private String user;
 	
+	private String picture;
+	
 	private String password;
 	 
 	private String token;
+
+	
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
 
 	public String getName() {
 		return name;

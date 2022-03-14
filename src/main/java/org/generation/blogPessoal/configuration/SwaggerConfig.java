@@ -16,39 +16,35 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 public class SwaggerConfig {
 	
 	@Bean
-	public OpenAPI springBlogPessoalOpenAPI() {
+	public OpenAPI springOpenAPI() {
 		return new OpenAPI()
 				.info(new Info()
-					.title("Projeto Blog Pessoal")
-					.description("Projeto Blog Pessoal - Ana Luiza")
-					.version("v0.0.1")
-				.license(new License()
-					.name("Generation Brasil")
-					.url("https://brazil.generation.org/"))
-				.contact(new Contact()
-					.name("Ana Luiza")
-					.url("https://www.linkedin.com/in/analuizalamas/")
-					.email("analu.lamas@yahoo.com.br")))
+						.title("Blog Pessoal")
+						.description("This is a Blog")
+						.version("v0.0.1")
+						.license(new License()
+								.name("Nalu's blog")
+								.url("<https://brazil.generation.org/>"))
+						.contact(new Contact()
+								.name("Github Ana Luiza")
+								.url("<https://github.com/nalulamas/>")
+								.email("analu.lamas@yahoo.com.br")))
 				.externalDocs(new ExternalDocumentation()
-					.description("Github")
-					.url("https://github.com/nalulamas/"));
+						.description("Github Project")
+						.url("<https://github.com/nalulamas/BlogPessoal>"));
 	}
-
+	
 	@Bean
-	public OpenApiCustomiser customerGlobalHeaderOpenApiCustomiser() {
-
+	public OpenApiCustomiser customerGlobalResponseStatus() {
 		return openApi -> {
 			openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().forEach(operation -> {
+				ApiResponses api = operation.getResponses();
 
-				ApiResponses apiResponses = operation.getResponses();
-
-				apiResponses.addApiResponse("200", createApiResponse("Sucesso!"));
-				apiResponses.addApiResponse("201", createApiResponse("Objeto Persistido!"));
-				apiResponses.addApiResponse("204", createApiResponse("Objeto Excluído!"));
-				apiResponses.addApiResponse("400", createApiResponse("Erro na Requisição!"));
-				apiResponses.addApiResponse("401", createApiResponse("Acesso Não Autorizado!"));
-				apiResponses.addApiResponse("404", createApiResponse("Objeto Não Encontrado!"));
-				apiResponses.addApiResponse("500", createApiResponse("Erro na Aplicação!"));
+				api.addApiResponse("200", createApiResponse("Sucess!"));
+				api.addApiResponse("201", createApiResponse("Created!"));
+				api.addApiResponse("400", createApiResponse("Request error!"));
+				api.addApiResponse("401", createApiResponse("Not authorized!"));
+				api.addApiResponse("500", createApiResponse("Internal server Error!"));
 
 			}));
 		};
