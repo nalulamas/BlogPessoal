@@ -35,19 +35,19 @@ public class UserModel {
 	@NotNull(message = "O atributo Usuário é Obrigatório!")
 	@Email(message = "O atributo Usuário deve ser um email válido!")
 	@Size(min = 3, max = 100)
-	private String user;
+	private String username;
 
 	@Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caractéres")
 	private String password;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties("user")
+	@OneToMany(mappedBy = "creator", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties("creator")
 	private List<Post> post;
 
-	public UserModel(Long id, String name, String user, String password) {
+	public UserModel(Long id, String name, String username, String password) {
 		this.id = id;
 		this.name = name;
-		this.user = user;
+		this.username = username;
 		this.password = password;
 	}
 
@@ -75,12 +75,12 @@ public class UserModel {
 		this.name = name;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
