@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
 
-import org.generation.blogPessoal.model.User;
+import org.generation.blogPessoal.model.UserModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,23 +24,23 @@ public class UserRepositoryTest {
 	@BeforeAll
 	void start() {
 		userRepository.deleteAll();
-		userRepository.save(new User (0L, "Maria","maria@email.com","123456"));
-		userRepository.save(new User (0L, "Jose","jose@email.com","123456"));
-		userRepository.save(new User (0L, "Ana","ana@email.com","123456"));
-		userRepository.save(new User (0L, "Fernando","fernando@email.com","123456"));
+		userRepository.save(new UserModel (0L, "Maria","maria@email.com","123456"));
+		userRepository.save(new UserModel (0L, "Jose","jose@email.com","123456"));
+		userRepository.save(new UserModel (0L, "Ana","ana@email.com","123456"));
+		userRepository.save(new UserModel (0L, "Fernando","fernando@email.com","123456"));
 	}
 	
 	@Test
 	@DisplayName("Retorna 1 usuario")
 	public void mostReturnAnUser() {
-		Optional<User> user = userRepository.findByUser("jose@email.com");
+		Optional<UserModel> user = userRepository.findByUser("jose@email.com");
 		assertTrue(user.get().getUser().equals("jose@email.com"));
 	}
 	
 	@Test
 	@DisplayName("Retorna 3 Usuarios")
 	public void mostReturnThreeUsers() {
-		List<User> userList = userRepository.findAllByNameContainingIgnoreCase("Silva");
+		List<UserModel> userList = userRepository.findAllByNameContainingIgnoreCase("Silva");
 		assertEquals(3, userList.size());
 		assertTrue(userList.get(0).getName().equals("José da Silva"));
 		assertTrue(userList.get(1).getName().equals("Maria da Silva"));

@@ -4,7 +4,7 @@ import java.nio.charset.Charset;
 import java.util.Optional;
 
 import org.apache.commons.codec.binary.Base64;
-import org.generation.blogPessoal.model.User;
+import org.generation.blogPessoal.model.UserModel;
 import org.generation.blogPessoal.model.UserLogin;
 import org.generation.blogPessoal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +19,16 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public Optional<User> registerUser(User user) {
+	public Optional<UserModel> registerUser(UserModel user) {
 		if (userRepository.findByUser(user.getUser()).isPresent())
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
 		user.setPassword(encryptPassword(user.getPassword()));
 		return Optional.of(userRepository.save(user));
 	}
 
-	public Optional<User> updateUser(User user) {
+	public Optional<UserModel> updateUser(UserModel user) {
 		if (userRepository.findById(user.getId()).isPresent()) {
-			Optional<User> searchUser = userRepository.findByUser(user.getUser());
+			Optional<UserModel> searchUser = userRepository.findByUser(user.getUser());
 			if (searchUser.isPresent()) {
 				if (searchUser.get().getId() != user.getId())
 					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
@@ -40,7 +40,7 @@ public class UserService {
 	}
 
 	public Optional<UserLogin> userLogin (Optional<UserLogin> userLogin) {	
-		Optional<User> user = userRepository.findByUser(userLogin.get().getUser());
+		Optional<UserModel> user = userRepository.findByUser(userLogin.get().getUser());
 		if (user.isPresent()) {
 			if (comparePassword(userLogin.get().getPassword(), user.get().getPassword())) {
 				userLogin.get().setId(user.get().getId());

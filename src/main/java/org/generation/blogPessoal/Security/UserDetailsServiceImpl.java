@@ -2,7 +2,7 @@ package org.generation.blogPessoal.Security;
 
 import java.util.Optional;
 
-import org.generation.blogPessoal.model.User;
+import org.generation.blogPessoal.model.UserModel;
 import org.generation.blogPessoal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		Optional <User> optional = userRepository.findByUser(userName);		
+		Optional <UserModel> optional = userRepository.findByUser(userName);		
 		if(optional.isPresent()) {
 			return new UserDetailsImpl(optional.get());
 		}else {

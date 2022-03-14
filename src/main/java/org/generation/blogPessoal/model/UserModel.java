@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
 @Table(name = "tb_user")
-public class User {
+public class UserModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +44,7 @@ public class User {
 	@JsonIgnoreProperties("user")
 	private List<Post> post;
 
-	public User(long id, String name, String user, String password) {
+	public UserModel(long id, String name, String user, String password) {
 		this.id = id;
 		this.name = name;
 		this.user = user;
@@ -99,5 +99,5 @@ public class User {
 		this.post = post;
 	}
 
-	public User() {	}
+	public UserModel() {	}
 }

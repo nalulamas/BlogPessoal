@@ -3,7 +3,7 @@ package org.generation.blogPessoal.Security;
 import java.util.Collection;
 import java.util.List;
 
-import org.generation.blogPessoal.model.User;
+import org.generation.blogPessoal.model.UserModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,7 +15,7 @@ public class UserDetailsImpl implements UserDetails {
 	private String password;
 	private List<GrantedAuthority> authorities;
 	
-	public UserDetailsImpl(User user) {
+	public UserDetailsImpl(UserModel user) {
 		this.userName = user.getUser();
 		this.password = user.getPassword();
 	}

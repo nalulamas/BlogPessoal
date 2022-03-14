@@ -38,7 +38,7 @@ public class Post {
 	
 	@ManyToOne
 	@JsonIgnoreProperties("post")
-	private User user;
+	private UserModel user;
 	
 	public long getId() {
 		return id;
@@ -80,11 +80,11 @@ public class Post {
 		this.theme = theme;
 	}
 
-	public User getUser() {
+	public UserModel getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserModel user) {
 		this.user = user;
 	}
 

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.generation.blogPessoal.model.User;
+import org.generation.blogPessoal.model.UserModel;
 import org.generation.blogPessoal.model.UserLogin;
 import org.generation.blogPessoal.repository.UserRepository;
 import org.generation.blogPessoal.service.UserService;
@@ -33,12 +33,12 @@ public class UserController {
 	private UserRepository repository;
 
 	@GetMapping("/all")
-	public ResponseEntity<List<User>> getAll() {
+	public ResponseEntity<List<UserModel>> getAll() {
 		return ResponseEntity.ok(repository.findAll());
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getById(@PathVariable long id) {
+	public ResponseEntity<UserModel> getById(@PathVariable long id) {
 		return repository.findById(id)
 				.map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
@@ -61,14 +61,14 @@ public class UserController {
 	 */
 
 	@PostMapping("/register")
-	public ResponseEntity<User> postUser(@Valid @RequestBody User user) {
+	public ResponseEntity<UserModel> postUser(@Valid @RequestBody UserModel user) {
 		return userService.registerUser(user)
 				.map(resp -> ResponseEntity.status(HttpStatus.CREATED).body(resp))
 				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<User> putUsuario(@Valid @RequestBody User user) {
+	public ResponseEntity<UserModel> putUsuario(@Valid @RequestBody UserModel user) {
 		return userService.updateUser(user)
 				.map(resp -> ResponseEntity.status(HttpStatus.OK).body(resp))
 				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());

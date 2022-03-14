@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 
-import org.generation.blogPessoal.model.User;
+import org.generation.blogPessoal.model.UserModel;
 import org.generation.blogPessoal.repository.UserRepository;
 import org.generation.blogPessoal.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
@@ -45,9 +45,9 @@ public class UserControllerTest {
 	@Order(1)
 	@DisplayName("Cadastrar um usuário")
 	public void mostCreateAnUser() {
-		HttpEntity<User> request = new HttpEntity<User>(new User( 0L,"Paulo Antunes", "Paulo_Antunes@email.com", "123456"));
+		HttpEntity<UserModel> request = new HttpEntity<UserModel>(new UserModel( 0L,"Paulo Antunes", "Paulo_Antunes@email.com", "123456"));
 		
-		ResponseEntity<User> answer = testRestTemplate.exchange("/users/register", HttpMethod.POST,request, User.class);
+		ResponseEntity<UserModel> answer = testRestTemplate.exchange("/users/register", HttpMethod.POST,request, UserModel.class);
 		
 		assertEquals(HttpStatus.CREATED, answer.getStatusCode());
 		assertEquals(request.getBody().getName(), answer.getBody().getName());
@@ -58,11 +58,11 @@ public class UserControllerTest {
 	@DisplayName("Não deve permitir duplicação do usuário.")
 	public void dontDuplicateAnUser() {
 		
-		userService.registerUser(new User(0L, "Maria Silva", "maria@email.com","12345"));
+		userService.registerUser(new UserModel(0L, "Maria Silva", "maria@email.com","12345"));
 		
-		HttpEntity<User> request = new HttpEntity<User>(new User(0L,"Paulo Antunes", "Paulo_Antunes@email.com", "123456"));
+		HttpEntity<UserModel> request = new HttpEntity<UserModel>(new UserModel(0L,"Paulo Antunes", "Paulo_Antunes@email.com", "123456"));
 		
-		ResponseEntity<User> answer = testRestTemplate.exchange("/users/register", HttpMethod.POST, request, User.class);
+		ResponseEntity<UserModel> answer = testRestTemplate.exchange("/users/register", HttpMethod.POST, request, UserModel.class);
 		
 		assertEquals(HttpStatus.BAD_REQUEST, answer.getStatusCode());
 	}	
@@ -71,14 +71,14 @@ public class UserControllerTest {
 	@DisplayName("Alterar um usuario")
 	public void mostChangeUser() {
 		
-		Optional <User> userCreate = userService.registerUser(new User (0L, "Juliana Andrews","juliana@email.com", "juliana123"));		
+		Optional <UserModel> userCreate = userService.registerUser(new UserModel (0L, "Juliana Andrews","juliana@email.com", "juliana123"));		
 		
-		User userUpdate = new User(userCreate.get().getId(),
+		UserModel userUpdate = new UserModel(userCreate.get().getId(),
 				"Juliana Andrws Ramos", "juliana_ramos@email.com", "juliana123");
 		
-		HttpEntity<User> request = new HttpEntity<User>(userUpdate);
+		HttpEntity<UserModel> request = new HttpEntity<UserModel>(userUpdate);
 		
-		ResponseEntity<User> answer = testRestTemplate.exchange("/users/register", HttpMethod.POST, request, User.class);
+		ResponseEntity<UserModel> answer = testRestTemplate.exchange("/users/register", HttpMethod.POST, request, UserModel.class);
 		
 		assertEquals(HttpStatus.CREATED, answer.getStatusCode());
 		assertEquals(userUpdate.getName(), answer.getBody().getName());
@@ -90,10 +90,10 @@ public class UserControllerTest {
 	@Order(4)
 	@DisplayName("Listar todos as Postagens")
 	public void mostChangeAllPosts() {
-		userService.registerUser(new User(0L, "Sabrina Sanches", "sabrina@email.com", 
+		userService.registerUser(new UserModel(0L, "Sabrina Sanches", "sabrina@email.com", 
 				"sabrina123"));			
 		
-		userService.registerUser(new User (0L, "Ricardo Marques", "ricardo@email.com","ricardo123"));
+		userService.registerUser(new UserModel (0L, "Ricardo Marques", "ricardo@email.com","ricardo123"));
 		
 		ResponseEntity<String> answer = testRestTemplate
 				.withBasicAuth("sabrina@email.com", "sabrina123")
