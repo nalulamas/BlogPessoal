@@ -34,7 +34,7 @@ public class UserRepositoryTest {
 	@DisplayName("Retorna 1 usuario")
 	public void mostReturnAnUser() {
 		Optional<UserModel> user = userRepository.findByUser("jose@email.com");
-		assertTrue(user.get().getUser().equals("jose@email.com"));
+		assertTrue(user.get().getUsername().equals("jose@email.com"));
 	}
 	
 	@Test

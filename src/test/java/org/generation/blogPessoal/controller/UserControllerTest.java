@@ -51,7 +51,7 @@ public class UserControllerTest {
 		
 		assertEquals(HttpStatus.CREATED, answer.getStatusCode());
 		assertEquals(request.getBody().getName(), answer.getBody().getName());
-		assertEquals(request.getBody().getUser(), answer.getBody().getUser());
+		assertEquals(request.getBody().getUsername(), answer.getBody().getUsername());
 	}
 	@Test
 	@Order(2)
@@ -82,7 +82,7 @@ public class UserControllerTest {
 		
 		assertEquals(HttpStatus.CREATED, answer.getStatusCode());
 		assertEquals(userUpdate.getName(), answer.getBody().getName());
-		assertEquals(userUpdate.getUser(), answer.getBody().getUser()); 
+		assertEquals(userUpdate.getUsername(), answer.getBody().getUsername()); 
 		
 	} 
 
