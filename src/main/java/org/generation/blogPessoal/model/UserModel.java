@@ -44,18 +44,18 @@ public class UserModel {
 	@JsonIgnoreProperties("user")
 	private List<Post> post;
 
-	public UserModel(long id, String name, String user, String password) {
+	public UserModel(Long id, String name, String user, String password) {
 		this.id = id;
 		this.name = name;
 		this.user = user;
 		this.password = password;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
