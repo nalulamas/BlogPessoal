@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, Long> {
-	public Optional<UserModel> findByUser(String user);
+	public Optional<UserModel> findByUsername(String username);
 
 	public List<UserModel> findAllByNameContainingIgnoreCase(String name);
 
