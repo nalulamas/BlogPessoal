@@ -39,7 +39,7 @@ public class UserService {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!", null);
 	}
 
-	public Optional<UserLogin> userLogin (Optional<UserLogin> userLogin) {	
+	public Optional<UserLogin> userLogin(Optional<UserLogin> userLogin) {
 		Optional<UserModel> user = userRepository.findByUsername(userLogin.get().getUser());
 		if (user.isPresent()) {
 			if (comparePassword(userLogin.get().getPassword(), user.get().getPassword())) {
@@ -47,12 +47,13 @@ public class UserService {
 				userLogin.get().setName(user.get().getName());
 				userLogin.get().setPicture(user.get().getPicture());
 				userLogin.get().setToken(generatorBasicToken(userLogin.get().getUser(), userLogin.get().getPassword()));
-                                userLogin.get().setPassword(user.get().getPassword());
+				userLogin.get().setPassword(user.get().getPassword());
+				userLogin.get().setType(user.get().getType());
+
 				return userLogin;
 			}
 		}
-		throw new ResponseStatusException(
-				HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos!", null);
+		throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos!", null);
 	}
 
 	private String encryptPassword(String password) {
