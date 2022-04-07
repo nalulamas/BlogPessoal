@@ -23,23 +23,23 @@ public class Theme {
 
 	@NotNull(message = "O atributo Descrição é obrigatório")
 	private String description;
-	
+
 	/*
 	 * Cascade é para caso de alteração de algo em um tema, todas as postagens
 	 * referentes a ele sofrerão alteração. If you change something, Cascade changes
 	 * everything about this. For exemple, I deleted the theme "moreInfo", every
 	 * posts linked with "moreInfo" will be deleted.
 	 */
-	
+
 	@OneToMany(mappedBy = "theme", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("theme")
 	private List<Post> post;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -51,11 +51,11 @@ public class Theme {
 		this.description = description;
 	}
 
-	public List<Post> getPostagem() {
+	public List<Post> getPost() {
 		return post;
 	}
 
-	public void setPostagem(List<Post> post) {
+	public void setPost(List<Post> post) {
 		this.post = post;
 	}
 
