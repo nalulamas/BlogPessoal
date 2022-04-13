@@ -40,11 +40,11 @@ public class Post {
 	@JsonIgnoreProperties("post")
 	private UserModel creator;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -88,8 +88,6 @@ public class Post {
 		this.creator = creator;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+	
 
 }
